@@ -30,7 +30,7 @@ def get_db():
 
 db_dependency =Annotated[Session,Depends(get_db)]
 
-@router.post("/auth/", status_code=status.HTTP_200_OK)
+@router.post("/auth/", status_code=status.HTTP_201_CREATED)
 async def create_user(db:db_dependency,create_user_request:CreateUserRequest):
     create_user_model = Users(
         email = create_user_request.email,
@@ -39,7 +39,8 @@ async def create_user(db:db_dependency,create_user_request:CreateUserRequest):
         first_name = create_user_request.first_name,
         last_name = create_user_request.last_name,
         role = create_user_request.role,
-        is_active = True
+        is_active = create_user_request.is_active,
     )
     db.add(create_user_model)
     db.commit()
+
